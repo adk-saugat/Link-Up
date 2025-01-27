@@ -15,12 +15,14 @@ app.use(express.static(publicDirPath))
 io.on("connection", (socket) => {
   socket.broadcast.emit("message", "A new user has joined!")
 
-  socket.on("sendMessage", (message) => {
+  socket.on("sendMessage", (message, callBack) => {
     io.emit("message", message)
+    callBack("Delivered!")
   })
 
-  socket.on("sendLocation", ({ latitude, longitude }) => {
+  socket.on("sendLocation", ({ latitude, longitude }, callBack) => {
     io.emit("message", `https://google.com/maps?q=${latitude},${longitude}`)
+    callBack("Location Shared!")
   })
 
   socket.on("disconnect", () => {

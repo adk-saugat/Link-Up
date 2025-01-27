@@ -8,7 +8,9 @@ document.querySelector("#input-form").addEventListener("submit", (event) => {
   event.preventDefault()
   const inputBox = document.querySelector("#message-box")
 
-  socket.emit("sendMessage", inputBox.value)
+  socket.emit("sendMessage", inputBox.value, (ackData) => {
+    console.log(ackData)
+  })
 })
 
 document.querySelector("#send-location").addEventListener("click", () => {
@@ -18,9 +20,15 @@ document.querySelector("#send-location").addEventListener("click", () => {
 
   navigator.geolocation.getCurrentPosition((position) => {
     const { latitude, longitude } = position.coords
-    socket.emit("sendLocation", {
-      latitude,
-      longitude,
-    })
+    socket.emit(
+      "sendLocation",
+      {
+        latitude,
+        longitude,
+      },
+      () => {
+        console.log("Location Shared!")
+      }
+    )
   })
 })
