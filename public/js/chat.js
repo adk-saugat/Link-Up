@@ -1,23 +1,52 @@
 const socket = io()
 
+const $messageForm = document.querySelector("#input-form")
+const $messageInput = $messageForm.querySelector("input")
+const $messageButton = $messageForm.querySelector("button")
+const $messages = document.querySelector("#messages")
+const $locationButton = document.querySelector("#send-location")
+
+//template
+const messageTemplate = document.querySelector("#message-template").innerHTML
+const locationTemplate = document.querySelector("#location-template").innerHTML
+
 socket.on("message", (message) => {
   console.log(message)
+
+  const html = Mustache.render(messageTemplate, {
+    message,
+  })
+  $messages.insertAdjacentHTML("beforeend", html)
 })
 
-document.querySelector("#input-form").addEventListener("submit", (event) => {
-  event.preventDefault()
-  const inputBox = document.querySelector("#message-box")
+socket.on("locationMessage", (locationURL) => {
+  console.log(locationURL)
 
-  socket.emit("sendMessage", inputBox.value, (ackData) => {
+  const html = Mustache.render(locationTemplate, {
+    locationURL,
+  })
+  $messages.insertAdjacentHTML("beforeend", html)
+})
+
+$messageForm.addEventListener("submit", (event) => {
+  event.preventDefault()
+
+  $messageButton.setAttribute("disabled", "disabled")
+
+  socket.emit("sendMessage", $messageInput.value, (ackData) => {
+    $messageButton.removeAttribute("disabled")
+    $messageInput.value = ""
+    $messageInput.focus()
     console.log(ackData)
   })
 })
 
-document.querySelector("#send-location").addEventListener("click", () => {
+$locationButton.addEventListener("click", () => {
   if (!navigator.geolocation) {
     return alert("GeoLocation not Supported!")
   }
 
+  $locationButton.setAttribute("disabled", "disabled")
   navigator.geolocation.getCurrentPosition((position) => {
     const { latitude, longitude } = position.coords
     socket.emit(
@@ -27,6 +56,7 @@ document.querySelector("#send-location").addEventListener("click", () => {
         longitude,
       },
       () => {
+        $locationButton.removeAttribute("disabled")
         console.log("Location Shared!")
       }
     )

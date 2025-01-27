@@ -21,8 +21,11 @@ io.on("connection", (socket) => {
   })
 
   socket.on("sendLocation", ({ latitude, longitude }, callBack) => {
-    io.emit("message", `https://google.com/maps?q=${latitude},${longitude}`)
-    callBack("Location Shared!")
+    io.emit(
+      "locationMessage",
+      `https://google.com/maps?q=${latitude},${longitude}`
+    )
+    callBack()
   })
 
   socket.on("disconnect", () => {
