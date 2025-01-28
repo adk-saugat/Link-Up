@@ -3,31 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Link Up</title>
+    <link rel="icon" href="./img/chat.png" />
+    <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-    <h1>Link Up</h1>
+    <div class="chat">
+      <div class="chat-sidebar"></div>
+      <div class="chat-main">
+        <div id="messages" class="chat-messages"></div>
 
-    <div id="messages"></div>
-
-    <form id="input-form" action="">
-      <input type="text" placeholder="Type something..." />
-      <button type="submit">Send</button>
-    </form>
-    <button id="send-location">Send Location</button>
+        <form id="input-form" class="compose" action="">
+          <input type="text" placeholder="Type something..." />
+          <button type="submit">Send</button>
+          <button id="send-location">Send Location</button>
+        </form>
+      </div>
+    </div>
 
     <script id="message-template" type="text/html">
-      <div>
-        <p>{{createdAt}} - {{text}}</p>
+      <div class="message-container">
+        <p>
+          <span class="user-name">User</span>
+          <span class="created-at">{{createdAt}}</span>
+        </p>
+        <p class="message">{{text}}</p>
       </div>
     </script>
 
     <script id="location-template" type="text/html">
-      <div>
+      <div class="message-container">
         <p>
-          {{createdAt}} -
-          <a href="{{locationURL}}" target="_blank"> My Current Location</a>
+          <span class="user-name">User</span>
+          <span class="created-at">{{createdAt}}</span>
         </p>
+        <a href="{{locationURL}}" target="_blank" class="location-link">
+          My Current Location</a
+        >
       </div>
     </script>
 
