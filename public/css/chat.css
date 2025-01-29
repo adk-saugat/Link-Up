@@ -3,6 +3,7 @@
   padding: 0;
   font-family: sans-serif;
   font-size: 20px;
+  text-transform: capitalize;
 }
 
 .chat {
@@ -15,6 +16,38 @@
 .chat .chat-sidebar {
   width: 30%;
   background-color: #222;
+}
+
+.side-bar-template {
+  width: 100%;
+}
+
+.side-bar .room-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #666;
+  height: 80px;
+}
+.room-title p {
+  font-size: 40px;
+  font-weight: 600;
+  color: white;
+}
+
+.side-bar .users-title {
+  color: white;
+  margin-top: 20px;
+  font-size: 30px;
+  font-weight: 500;
+  margin-left: 30px;
+}
+
+.side-bar .users {
+  margin-top: 20px;
+  margin-left: 30px;
+  list-style: none;
+  color: white;
 }
 
 .chat .chat-main {
@@ -56,6 +89,10 @@
   background-color: #7b2cbf;
   color: white;
   cursor: pointer;
+}
+
+.message-container {
+  margin-bottom: 20px;
 }
 
 .message-container .user-name {

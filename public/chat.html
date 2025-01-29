@@ -9,12 +9,17 @@
   </head>
   <body>
     <div class="chat">
-      <div class="chat-sidebar"></div>
+      <div id="sidebar" class="chat-sidebar"></div>
       <div class="chat-main">
         <div id="messages" class="chat-messages"></div>
 
         <form id="input-form" class="compose" action="">
-          <input type="text" placeholder="Type something..." />
+          <input
+            type="text"
+            placeholder="Type something..."
+            required
+            autocomplete="off"
+          />
           <button type="submit">Send</button>
           <button id="send-location">Send Location</button>
         </form>
@@ -24,7 +29,7 @@
     <script id="message-template" type="text/html">
       <div class="message-container">
         <p>
-          <span class="user-name">User</span>
+          <span class="user-name">{{username}}</span>
           <span class="created-at">{{createdAt}}</span>
         </p>
         <p class="message">{{text}}</p>
@@ -34,12 +39,24 @@
     <script id="location-template" type="text/html">
       <div class="message-container">
         <p>
-          <span class="user-name">User</span>
+          <span class="user-name">{{username}}</span>
           <span class="created-at">{{createdAt}}</span>
         </p>
         <a href="{{locationURL}}" target="_blank" class="location-link">
           My Current Location</a
         >
+      </div>
+    </script>
+
+    <script id="side-bar-template" type="text/html">
+      <div class="side-bar">
+        <div class="room-title"><p>{{room}}</p></div>
+        <h2 class="users-title">Users</h2>
+        <ul class="users">
+          {{#users}}
+          <li>- {{username}}</li>
+          {{/users}}
+        </ul>
       </div>
     </script>
 
