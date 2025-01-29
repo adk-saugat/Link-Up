@@ -6,6 +6,12 @@ const {
   generateMessage,
   generateLocationMessage,
 } = require("../src/utils/message")
+const {
+  addUser,
+  getUser,
+  getUsersInRoom,
+  removeUser,
+} = require("./utils/users")
 
 const app = express()
 const server = http.createServer(app)
@@ -17,9 +23,21 @@ const port = 3000
 app.use(express.static(publicDirPath))
 
 io.on("connection", (socket) => {
-  socket.emit("message", generateMessage("Welcome!"))
+  socket.on("join", (options, callback) => {
+    const { error, user } = addUser({ id: socket.id, ...options })
 
-  socket.broadcast.emit("message", generateMessage("A new user has joined!"))
+    if (error) {
+      return callback(error)
+    }
+    socket.join(user.room)
+
+    socket.emit("message", generateMessage("Welcome!"))
+    socket.broadcast
+      .to(user.room)
+      .emit("message", generateMessage(`${user.username} has joined.`))
+
+    callback()
+  })
 
   socket.on("sendMessage", (message, callBack) => {
     io.emit("message", generateMessage(message))
@@ -37,7 +55,14 @@ io.on("connection", (socket) => {
   })
 
   socket.on("disconnect", () => {
-    io.emit("message", generateMessage("A user has left."))
+    const user = removeUser(socket.id)
+
+    if (user) {
+      io.to(user.room).emit(
+        "message",
+        generateMessage(`${user.username} has left.`)
+      )
+    }
   })
 })
 
